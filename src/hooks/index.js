@@ -68,3 +68,32 @@ export const useTasks = selectedProject => {
 
     return { tasks, archivedTasks }; // return array of tasks/archived tasks related to project. 
 };
+
+export const useProjects = () => {
+    // again, writing hooks for each custom hooks
+    const [projects, setProjects] = useState([]);
+
+    // this is another useEffect hook, updating on each time [OBJECT] updates.
+    useEffect(() => {
+        // same as before, but get ALL projects
+        firebase
+            .firestore() // get into firestore database
+            .collection('projects') // get projects collection
+            .where('userId', '==', 'randomUser') // where the userId is randomUser (we made that)
+            .get() // we dont need to filter projects, so we can go right into snapshots (GETS THEM ONCE!)
+            .then(snapshot => {
+                const allProjects = snapshot.docs.map(project => ({ // synonymous with newTasks (from before). gets all projects
+                    ...project.data(), // all projects
+                    docId: project.id, // makes an ID in case we want to delete/modify projects
+                }));
+
+                // to stop an infinite loop from happening when we reset our projects (using setProjects), we have a check:
+                if (JSON.stringify(allProjects) !== JSON.stringify(projects)) {
+                    setProjects(allProjects); // only set if JSON is different (won't have infinite loop)
+                }
+            });
+
+    }, [projects]);
+
+    return { projects, setProjects };
+}

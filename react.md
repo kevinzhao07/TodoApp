@@ -75,6 +75,19 @@ We are not limited to the simple hooks provided by React, as we are going to imp
 
 The rest of the hook is with modifying `unsubscribe` variable, and using a new method `onSnapshot` and `snapshot`. The code is detailed and commented in `hooks/`. 
 
+Additionally, another hook is going to be created right after (`useProjects`)
+> commented and explained in the codebase as well.
+
+### Continuing Building
+Next, we build the Tasks component that will be used in our `Content.js`. In this component, we are directly using variable values, and they are accessed by `{}` like in Django/Jinja.
+
+there is no `{% for val in vals %}` like in jinja. In order to access ALL elements in an array, we have to use `tasks.map(task => ())`, putting whatever we need repeated inside `()`. 
+> accessing variables/keys inside an element requires different syntax: {`` `${ [VARIABLE ID] }` ``}
+
+Each tasks to clear requires a `Checkbox`. Because we want to archive the task that is related to each checkbox, we can pass in an argument `id`. To pass args into a component, the syntax goes: `export const [COMPONENT] = ([ARGUMENTS]) => { ... }`.
+
+We want the `Checkbox` to call a function `onClick()` that will take the task and archive it. The syntax is: `onClick={([Args]) => [Function]}`.
+
 ## Peculiarities 
 **Named Exports**  
 Instead of importing `ReactDOM`, you can just import `{ render }`. This allows you to write `render` instead of `ReactDOM.render` everytime. These are called **named exports**.
