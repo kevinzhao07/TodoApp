@@ -86,7 +86,36 @@ there is no `{% for val in vals %}` like in jinja. In order to access ALL elemen
 
 Each tasks to clear requires a `Checkbox`. Because we want to archive the task that is related to each checkbox, we can pass in an argument `id`. To pass args into a component, the syntax goes: `export const [COMPONENT] = ([ARGUMENTS]) => { ... }`.
 
-We want the `Checkbox` to call a function `onClick()` that will take the task and archive it. The syntax is: `onClick={([Args]) => [Function]}`.
+We want the `Checkbox` to call a function `onClick()` that will take the task and archive it. The syntax is: `onClick={([Args]) => [Function]}`. 
+
+### Adding a bit of SASS 
+To style our application, we will use CSS but an extension called sass/scss. This is a new way of writing CSS that includes indenting (to give styles to children elements of specific parent elements), as well as creating variables for commonly used styles and `mixins` for longer pieces of code that is used often throughout. There are a lot of special syntax that comes with using SASS:
+
+1. Creating variables. Requires the syntax `$[NAME OF VARIABLE]: [ATTRIBUTE HERE];` Each variable is separated by whitespace, and you can create as many variables as you need. 
+2. Mixins. These are large groups of CSS that usually work well together and is repeated throughout the project. They are created by writing `@mixin [NAME OF MIXIN]($[OPTIONAL PARAMTERS]) { ... }`. These optional parameters **must** have `$` before them to work. Also, they are able to have a default value if they are set like so: `$width: 400px`.
+> to use either elements or mixins we have to use the keyword `@include [variable/mixin]`
+3. Referencing classes of similar elements. `&` is an interesting keyword, and refers to different classes on similar elements. An example clears it up below:
+```scss
+div {
+  &.logo {
+    // code here
+  }
+
+  &.another {
+    // code here
+  }
+}
+```
+vs.
+```css
+div.logo {
+  /* code here */
+}
+div.another {
+  /* code here */
+}
+```
+There are also many useful keywords, like `first-of-type`, `svg`, `:nth-child(x)`, where x is the nth child.
 
 ## Peculiarities 
 **Named Exports**  

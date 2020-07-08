@@ -1,4 +1,5 @@
 import React from 'react';
+import { firebase } from '../firebase';
 
 export const Checkbox = ({id}) => {
   // writing a "django view". when checkbox is checked, the function archiveTask
@@ -12,4 +13,14 @@ export const Checkbox = ({id}) => {
         archived: true,
       });
   };
+
+  return (
+    <div className="checkbox-holder"
+      data-testid="checkbox-action"
+      onClick={() => archiveTask()}
+    >
+      <span className="checkbox" />
+
+    </div>
+  );
 }

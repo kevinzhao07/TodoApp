@@ -1,10 +1,14 @@
 import React from 'react';
-import { Checkbox } from 'checkbox';
+import { Checkbox } from './Checkbox';
+import { useTasks } from '../hooks';
 
 // always using this syntax to export components
 export const Tasks = () => {
 
-  const tasks = [];
+  // get all specified tasks (use react hooks!)
+  const { tasks } = useTasks('1');
+  console.log(tasks);
+
   const projectName = '';
 
   return (
