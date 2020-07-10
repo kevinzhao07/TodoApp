@@ -203,8 +203,8 @@ header {
   height: calc(100vh);
   padding-top: 74px;
   position: fixed;
-  // overlay-x: hidden;
-  // overlay-y: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
   border-right: $generic-border;
   background-color: #fafafa;
 
@@ -333,6 +333,38 @@ header {
         font-weight: bold;
         background-color: white;
       } 
+    }
+  }
+}
+
+// CONFIRM-DELETE
+.project-delete-modal {
+  position: relative;
+
+  &_inner {
+    @include box-overlay();
+    z-index: 99;
+    width: 200px;
+    padding: 10px;
+    top: 10px;
+    right: 0;
+    background-color: white;
+
+    p {
+      margin-top: 5px;
+      margin-bottom: 5px;
+      line-height: normal;
+      font-weight: normal;
+      font-size: 15px;
+    }
+
+    button {
+      @include btn('50px');
+    }
+
+    span {
+      @include cancel();
+      font-weight: normal;
     }
   }
 }

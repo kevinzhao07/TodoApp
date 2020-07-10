@@ -117,6 +117,21 @@ div.another {
 ```
 There are also many useful keywords, like `first-of-type`, `svg`, `:nth-child(x)`, where x is the nth child.
 
+### Continuing, adding Context
+Context is a way to pass down data/variables to components that may be multiple levels deep instead of passing them through props. We have a projects context because we want to modify our projects list in multiple locations. It seems easier to export the context one time rather than pass it in through props in multiple levels.
+
+To have context between mulitple componenets, we have to have a `provider` and a `consumer`. The provider exists at the top level and is consumed at the bottom level. The context is exported by the provider and then imported by each consumer. We do the exporting here in `context/index.js`. The context also exports a hook, allowing whichever consumer it encounters to modify `projects` if they'd like. 
+
+We want to change which project we are selecting in the sidebar. Therefore, we need to use the context for `Selected Project` in order to access those variables. In this file, there are a lot of hooks that are mainly for keeping track of creating projects and which projects that are selected. 
+
+### Building the Projects Component
+After our context has been written, we have to continue with building the Project component. This will be used in our sidebar to display all the projects that we currently have so far, and can also be used to toggle between the selected project (and what's displayed on the main section). We will use a few react hooks and will be importing the context that we previously created. This allows us to change the value of the variables `activeProject` and `projects`, in case a few are created or deleted. 
+> note that an error regarding requiring indeces can be easily fixed by creating indeces in the firebase website. This is usually caused by using `orderBy()` without having indeces. However, creating the indeces is as simple as following a few instructions on their website and clicking a few buttons. 
+
+### Individual Projects
+React is all about individual control. We want to have as much control of our project as we would like, and building individual components for each `Project` is a good start. This way, we can target updates for each specific project without the need of mapping all projects every time. We will have individual components so it is easy to delete specific projects. Inside this component, we bulit a delete project button that allows for users to delete projects. It gets the database through firebase. 
+> we will add more styling into `App.scss` in order to correctly style the rest of our application. 
+
 ## Peculiarities 
 **Named Exports**  
 Instead of importing `ReactDOM`, you can just import `{ render }`. This allows you to write `render` instead of `ReactDOM.render` everytime. These are called **named exports**.
