@@ -132,6 +132,15 @@ After our context has been written, we have to continue with building the Projec
 React is all about individual control. We want to have as much control of our project as we would like, and building individual components for each `Project` is a good start. This way, we can target updates for each specific project without the need of mapping all projects every time. We will have individual components so it is easy to delete specific projects. Inside this component, we bulit a delete project button that allows for users to delete projects. It gets the database through firebase. 
 > we will add more styling into `App.scss` in order to correctly style the rest of our application. 
 
+### Individual Tasks
+Again, relying on the powerfulness of individuality, we are going to build individual tasks. This is because we may want to do something specific to each task and cannot rely on refreshing all the tasks every time one of them changes. The tasks will be filtered and only the ones that are chosen will be shown in the main content. There are small checkboxes next to each task that will archive them as they are completed. 
+> most of what are buildling is using the same syntax and content-- using context, updating using hooks, etc. 
+
+### Adding Projects
+We are going to be buliding a component which allows us to add projects within our React app. This will include modifying the firebase. The code is written and commented inside `AddProject.js`. The code for this is pretty short, just calling in firebase, adding it into the database, and refreshing what we have for now. The trickier parts is to make sure everything is imported as needed, and the `onClick` and `onChanges` are correctly written. 
+
+### Adding Tasks
+
 ## Peculiarities 
 **Named Exports**  
 Instead of importing `ReactDOM`, you can just import `{ render }`. This allows you to write `render` instead of `ReactDOM.render` everytime. These are called **named exports**.
@@ -155,3 +164,35 @@ export const [APP NAME] = () => (
 ```
 
 The differences lie in whether or not `return` is necessary. According to the tutorial, this is just better practice. 
+
+**When to use {}**  
+`{}` are a hard thing to understand when it comes to using them within React functions. For example, the two code snippets below are NOT identical:
+```js
+export const getTitle = (projects, projectId) => 
+  projects.find(project => project.projectId === projectId);
+
+export const getTitle = (projects, projectId) => {
+  projects.find(project => project.projectId === projectId);
+}
+```
+When we intentionally use `{}`, we are omitting that hidden return statement in the first code block. We are using an arrow function, so it assumes to return whatever evaluates from our next line of code. This is a shortcut and can be used when we are sure to return an expression afterwards. However, the second code snipped intentionally adds back the `{}`, which means we must explicitly add our `return ();` statement as well. As it is right now, these two code snippets have very different functionalities. 
+
+**If then statements inside components**  
+There's an interesting new syntax for React that helps with writing if-then/if-else statements. This is mostly seen when writing a function inside a component that will use that function. It is often seen as this:
+```js
+const addProject = () => {
+    projectName && // this basically means if projectName exists, then... 
+  }
+```
+The `&&` symbols gives the "then" keyword, and there is an implicit `if` that asks if the projectName exists.
+
+**Obtaining values from Inputs**  
+React has a way to get user inputted values from forms. In any HTML element, we have to add our desired characteristics. Example below:
+```html
+<input 
+  class="randomClass"
+  value={VARIABLE-NAME-HERE}
+  onChange={e => setProjectName(e.target.value)}
+>
+```
+If we enclose which variable we want to use inside curly braces and put it inside value. When we submit the form (or press enter) the variable will update to have that current value. 

@@ -1,15 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Checkbox } from './Checkbox';
 import { useTasks } from '../hooks';
+import { collatedTasks } from '../constants';
+import { getTitle, getCollatedTitle, collatedTasksExist } from '../helpers';
+import { useSelectedProjectValue, useProjectsValue } from '../context';
 
 // always using this syntax to export components
 export const Tasks = () => {
 
-  // get all specified tasks (use react hooks!)
-  const { tasks } = useTasks('1');
-  console.log(tasks);
+  // use our context in order to get the selectedProjects and projects
+  const { selectedProject } = useSelectedProjectValue(); 
+  const { projects } = useProjectsValue();
 
-  const projectName = '';
+  // get all specified tasks (use react hooks!)
+  const { tasks } = useTasks(selectedProject);
+
+  let projectName = '';
+
+  // getting regular tasks (if exists) that are not inbox, tomorrow, or next 7
+  if (projects && projects.length > 0 && selectedProject && !collatedTasksExist(selectedProject)) {
+    projectName = getTitle(projects, selectedProject).name;
+  }
+
+  // if our selectedProject was one of (inbox, tomorrow, next 7), get those. 
+  if (collatedTasksExist(selectedProject) && selectedProject) {
+    projectName = getCollatedTitle(collatedTasks, selectedProject).name;
+  }
+
+  // whenever we select a new project, we update the document's title tag. 
+  useEffect(() => {
+    document.title = `${projectName}: Todoist`;
+  });
+
 
   return (
     <div className="tasks" data-testid="tasks">

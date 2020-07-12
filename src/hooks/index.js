@@ -32,9 +32,9 @@ export const useTasks = selectedProject => {
         unsubscribe = // what do we really want unsubscribe to be equal to?
             selectedProject && !collatedTasksExist(selectedProject) // if the project doens't exist in collated tasks, 
                 ? (unsubscribe = unsubscribe.where('projectId', '==', selectedProject)) // only show tasks of selectedProjects
-                : selectedProject == "TODAY" // if not, is it equal to today's tasks?
-                    ? (unsubscribe = unsubscribe.where('date', '==', moment.format("MM/DD/YYYY"))) // only show tasks from today
-                    : selectedProject == "INBOX" || selectedProject === 0 // if not, is it equal to inbox?
+                : selectedProject === "TODAY" // if not, is it equal to today's tasks?
+                    ? (unsubscribe = unsubscribe.where('date', '==', moment().format("MM/DD/YYYY"))) // only show tasks from today
+                    : selectedProject === "INBOX" || selectedProject === 0 // if not, is it equal to inbox?
                         ? (unsubscribe = unsubscribe.where('date', '==', '')) // only show inbox tasks
                         : unsubscribe; // leave unsubscribe as it is
 
