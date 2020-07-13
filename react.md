@@ -140,6 +140,7 @@ Again, relying on the powerfulness of individuality, we are going to build indiv
 We are going to be buliding a component which allows us to add projects within our React app. This will include modifying the firebase. The code is written and commented inside `AddProject.js`. The code for this is pretty short, just calling in firebase, adding it into the database, and refreshing what we have for now. The trickier parts is to make sure everything is imported as needed, and the `onClick` and `onChanges` are correctly written. 
 
 ### Adding Tasks
+This component will allow us to add tasks into our React app. Evidently, the functionality between the two will remain largely similar and calling firebase will be necessary. Again, the code will be written and commented inside `AddTask.js`. This is a more complicated component with more parts. This is because when adding a task, we have a choice for which project it belongs to as well as which date it should be associated with. Both these must be selected through drop down menus, which are components in and of themselves. Also, we have to keep track of variables that either display those overlays or not. All in all, it is a pretty complicated component where keeping track of seeing the overlay is key. 
 
 ## Peculiarities 
 **Named Exports**  
@@ -185,6 +186,15 @@ const addProject = () => {
   }
 ```
 The `&&` symbols gives the "then" keyword, and there is an implicit `if` that asks if the projectName exists.
+
+This also works when we are writing JSX and are trying to render elements based on whether a certain variable is true or not. For example, this syntax is also valid inside a return statement as shown below:
+```js
+{ showAddTaskMain && ( // asking is showAddTaskMain true? if so, then render the rest of the elements (surrounded by ()).
+  <div className="add-task_shallow" data-testid="show-main-action" onClick={() => setShowMain(!showMain)}>
+    ...
+  </div>
+)}
+```
 
 **Obtaining values from Inputs**  
 React has a way to get user inputted values from forms. In any HTML element, we have to add our desired characteristics. Example below:
