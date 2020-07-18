@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { FaRegCalendarAlt, FaRegListAlt } from 'react-icons/fa';
+import { FaRegCalendarAlt, FaRegListAlt, FaTimes } from 'react-icons/fa';
 import { firebase } from '../firebase';
 import moment from 'moment';
 import { useSelectedProjectValue } from '../context';
+import { ProjectOverlay } from './ProjectOverlay';
+import { TaskDate } from './TaskDate';
 
 // showAddTaskMain (should the main view show an add task button?) / showShouldMain (should the main view show the dropdown? FALSE if not clicked)
 // showQuickAddTask (should the header show quick add?) / setShowQuickAddTask (set false when quick add is finished/cancelled)
@@ -11,10 +13,12 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
   // setting up our variables that we will use in AddTask.
   const [task, setTask] = useState(''); // task that is being added
   const [taskDate, setTaskDate] = useState(''); // which date it's being added
+  const [taskDay, setTaskDay] = useState('');
   const [project, setProject] = useState(''); // does it belong to a project?
   const [showMain, setShowMain] = useState(shouldShowMain); // show the addTask overlay in main? default no.
   const [showProjectOverlay, setShowProjectOverlay] = useState(false); // show the project overlay? default no, unless pressed.
   const [showTaskDate, setShowTaskDate] = useState(false); // show the task due date? default no, unless pressed.
+  const [projectName, setProjectName] = useState(''); // show selected projectName
 
   const { selectedProject } = useSelectedProjectValue(); // context for adding tasks INTO the selected project (quick add).
 
@@ -25,9 +29,11 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
 
     if (projectId === "TODAY") { // if we are ADDING our task to Project-TODAY, then the date is today
       collatedDate = moment().format('MM/DD/YYYY')
+      setTaskDay(moment().format('dddd'));
     }
     else if (projectId === "NEXT_7") { // if we are ADDING our task to Project-NEXT_7, then the date is 7 days from today
       collatedDate = moment().add(7, 'days').format('MM/DD/YYYY')
+      setTaskDay(moment().add(7, 'days').format('dddd'));
     }
 
     return (
@@ -41,15 +47,19 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
           date: collatedDate || taskDate,
           archived: false,
           task,
+          projectName,
         })
         .then(() => { // then, reset everything for the next adding task.
           setTask('');
           setProject('');
           setShowMain('');
+          setProjectName('');
+          setTaskDay('');
+          setTaskDate('');
           setShowProjectOverlay(false);
         })
     );
-  }
+  };
 
   return (
     // is showQuickAddTask true? adds another class if it is.
@@ -69,7 +79,7 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
           {/* what to show if showQuickAddTask is true */}
           {showQuickAddTask && (
             <>
-              <div data-testid="quick-add-task">
+              <div data-testid="quick-add-task" className="quick-add-task">
                 <h2 className="header">Quick Add Task</h2>
                 <span
                   className="add-task_cancel-x"
@@ -79,17 +89,20 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
                     setShowMain(false);
                     setShowProjectOverlay(false);
                     setShowQuickAddTask(false);
+                    setProjectName('');
+                    setTaskDate('');
+                    setTaskDay('');
+                    setProject(selectedProject);
                   }}
                 >
-                  X
+                  <FaTimes />
                 </span>
               </div>
             </>
           )}
 
           {/* what shows up if only showMain is true (not quick add) */}
-          <p>Project Overlay</p>
-          <p>Date Overlay</p>
+          
           <input // input for adding our task. Giving it a value={task} refers it to task whenever it changes (onChange).
             className="add-task_content"
             aria-label="Enter your task"
@@ -99,12 +112,56 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
             onChange={(e) => setTask(e.target.value)}
           />
 
+          {(projectName || taskDate) && (
+            <div className="add-task_selections">
+              {/* adding selected project name for task */}
+              {projectName && (
+                <div className="add-task_projectName">
+                  <span className="add-task_projectText">
+                    { projectName }
+                  </span>
+  
+                  <span>
+                    <FaTimes 
+                      className="add-task_project-cancel" 
+                      onClick={() => {
+                        setProjectName('');
+                        setProject(selectedProject);
+                      }}
+                    />
+                  </span>
+  
+                </div>
+              )}
+  
+              {/* adding selected date for task */}
+              {taskDate && (
+                <div className="add-task_selected-date">
+                  {taskDay}, {taskDate}
+  
+                  <FaTimes 
+                    className="add-task_project-cancel" 
+                    onClick={() => {
+                      setTaskDate('');
+                      setTaskDay('');
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          
+
           {/* for NOT quick add, confirm adding a task */}
           <button
             type="button"
             className="add-task_submit"
             data-testid="add-task"
-            onClick={() => { addTask(); }} // if this is clicked, add a task (all variables are defined)
+            onClick={() => 
+              showQuickAddTask
+                ? addTask() && setShowQuickAddTask(false)
+                : addTask()
+            } // if this is clicked, add a task (all variables are defined)
           >
             Add Task
           </button>
@@ -115,6 +172,10 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
               onClick={() => { // resets everything if cancelled. Note quick add is already false.
                 setShowMain(false);
                 setShowProjectOverlay(false);
+                setProjectName('');
+                setProject(selectedProject);
+                setTaskDate('');
+                setTaskDay('');
               }}
             >
               Cancel
@@ -137,6 +198,24 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
           >
             <FaRegCalendarAlt />
           </span>
+
+          {/* this is the ProjectOverlay Component (passed in a few props) */}
+          <ProjectOverlay 
+            setProject={setProject} 
+            setShowProjectOverlay={setShowProjectOverlay}
+            showProjectOverlay={showProjectOverlay}
+            setProjectName={setProjectName}
+          />
+
+
+          {/* <TaskDate /> */}
+          <TaskDate
+            setTaskDate={setTaskDate}
+            showTaskDate={showTaskDate}
+            setShowTaskDate={setShowTaskDate}
+            setTaskDay={setTaskDay}
+          />
+
 
         </div>
       )}

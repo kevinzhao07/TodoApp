@@ -26,17 +26,24 @@ ul {
 }
 
 // VARIABLES
-$generic-box-shadow: rgba(0,0,0,0.1) 0px, 0px, 0px, 1px, rgba(0,0,0,0.1) 0px 4px 11px;
+$generic-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 4px 11px;
 $generic-border: 1px solid #f1f1f1;
 $generic-bg: #db4c3f;
 
 // MIXINS (Groups of CSS to be used throughout)
+@mixin color-palette() {
+  color: #99b898;
+  color: #feceab;
+  color: #ff847c;
+  color: #e84a5f;
+}
+
 @mixin box-overlay() {
+  -webkit-box-shadow: $generic-box-shadow;
   box-shadow: $generic-box-shadow;
   position: absolute;
   width: 100%;
   z-index: 1;
-  top: 85px;
   border-radius: 3px;
 }
 
@@ -67,7 +74,7 @@ $generic-bg: #db4c3f;
   font-weight: bold;
   font-size: 13px !important;
   line-height: 17px;
-  padding: 6px 12px 7px 12px;
+  padding: 7px 12px 7px 12px;
   position: relative;
   display: inline-block;
   white-space: nowrap;
@@ -82,6 +89,7 @@ $generic-bg: #db4c3f;
   cursor: pointer;
   font-size: 14px;
   margin: 2px 5px;
+  text-decoration: underline;
 }
 
 @mixin task-item() {
@@ -128,7 +136,7 @@ header {
   top: 0;
   width: 100%;
 
-  @include mq('900px') {
+  @include mq('1040px') {
     padding: 0 10px;
   }
 
@@ -139,7 +147,7 @@ header {
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    max-width: 922px;
+    max-width: 1022px;
     margin: auto;
     height: 44px;
 
@@ -208,7 +216,7 @@ header {
   border-right: $generic-border;
   background-color: #fafafa;
 
-  @include mq('900px') {
+  @include mq('1040px') {
     display: none;
   }
 
@@ -234,7 +242,7 @@ header {
       }
     }
 
-    &:active, &:hover {
+    &.active, &:hover {
       font-weight: bold;
       background-color: white;
     }
@@ -374,13 +382,13 @@ header {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr auto;
-  max-width: 922px;
+  max-width: 1022px;
   margin: auto;
 }
 
 // INDIVIDUAL TASKS
 .tasks {
-  width: 656px;
+  width: 756px;
   background-color: white;
   margin-left: 266px;
   border-right: $generic-border;
@@ -388,7 +396,7 @@ header {
   vertical-align: top;
   padding: 80px 40px 84px 40px;
 
-  @include mq('900px') {
+  @include mq('1040px') {
     margin-left: 0;
     width: auto;
   }
@@ -403,22 +411,75 @@ header {
     margin-top: 20px;
   }
 
+  .associated-project {
+    width: 115px;
+    background-color: $generic-bg;
+    color: #fff !important;
+    border: 1px solid transparent;
+    font-weight: bold;
+    font-size: 13px !important;
+    line-height: 17px;
+    padding: 3px 0px;
+    border-radius: 3px !important;
+    text-decoration: none !important;
+    text-align: center;
+    float: right;
+    margin-bottom: 3px;
+  }
+
+  &_display-date {
+    color: rgb(119, 119, 119);
+    font-style: italic;
+    float: right;
+  }
+
+  &_task {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 19px;
+  }
+
+  &_information {
+    width: 130px;
+    position: absolute;
+    bottom: 5px;
+    right: 0px;
+  }
+
   &_list li {
     display: flex;
     line-height: 18px;
-    color: #333;
+    color: rgb(24, 24, 24);
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 14px;
     list-style-type: none;
     border-bottom: 1px solid #f0f0f0;
+    position: relative;
+
+    .crossed-out {
+      text-decoration: line-through;
+      color: #a1a1a1;
+    }
+
+    .item {
+      min-height: 43px;
+      line-height: 43px;
+      width: 70%;
+      word-break: break-all;
+
+      &_short {
+        min-height: 19px;
+        line-height: 19px;
+      }
+    }
 
     .checkbox-holder {
       margin-right: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      line-height: 16px;
+      line-height: 17px;
 
       .checkbox {
         cursor: pointer;
@@ -432,6 +493,11 @@ header {
       }
     }
   }
+}
+
+// QUICK ADD TASK
+.quick-add-task {
+  overflow: auto;
 }
 
 // ADD TASK
@@ -460,6 +526,7 @@ header {
       top: 50%;
       padding: 20px 30px;
       transform: translate(-50%, -50%);
+      width: 450px;
 
       .header {
         font-size: 13px;
@@ -476,6 +543,7 @@ header {
       font-size: 12px;
       margin-top: 10px;
     }
+
   }
 
   &_main {
@@ -503,6 +571,39 @@ header {
     padding-right: 10px;
   }
 
+  &_selections {
+    display: block;
+    clear: both;
+    overflow: auto;
+  }
+
+  &_projectName {
+    @include btn(49%);
+    background-color: #2972c7;
+    float: left;
+    vertical-align: middle;
+    height: 33px;
+  }
+  
+  &_projectText {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    max-width: 90%;
+    display: inline-block;
+  }
+
+  &_project-cancel {
+    float: right;
+    margin-top: 2px;
+  }
+
+  &_selected-date {
+    @include btn(49%);
+    margin-right: 0px;
+    float: right;
+    background-color: #2972c7;
+  }
+
   &_cancel, &_submit {
     @include no-select;
   }
@@ -512,7 +613,7 @@ header {
   }
 
   &_submit {
-    @include btn('90px');
+    @include btn(90px);
   }
 }
 
@@ -539,18 +640,14 @@ header {
   @include box-overlay();
   background-color: #fff;
   width: 200px;
+  margin-top: 10px;
   right: 0;
 
-  &__list li {
+  &_list li {
     @include task-item();
-    padding: 0;
 
-    span:first-of-type {
-      margin-right: 10px;
-
-      svg {
-        fill: grey;
-      }
+    svg {
+      fill: grey;
     }
   }
 }
@@ -558,7 +655,8 @@ header {
 // PROJECT OVERLAY
 .project-overlay {
   @include box-overlay();
-  background-color: white; 
+  margin-top: 10px;
+  background-color: white;
 
   &_list li {
     @include task-item();

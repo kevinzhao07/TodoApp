@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useProjectsValue, useSelectedProjectValue } from '../context';
-import { IndividualProject } from './layouts/IndividualProject';
+import { IndividualProject } from './IndividualProject';
 
 export const Projects = ({ activeValue = null }) => {
   // set an active project for now IF IT EXISTS
@@ -12,12 +12,12 @@ export const Projects = ({ activeValue = null }) => {
 
   return (
     // if projects exist, map every singular project (this is what keyword map is for)
-    projects && projects.map(project => (
+    projects && projects.map((project) => (
       // make sure to assign unique keys (required), and a doc-id (in order to delete), test is optional
       <li
         key={project.projectId}
         data-doc-id={project.docId}
-        data-testid="project-action"
+        data-testid="project-action-parent"
         className={
           active === project.projectId // according to our variable, is this project the active one?
             ? 'active sidebar_project' // if it is, then give it the class active as well
@@ -28,9 +28,8 @@ export const Projects = ({ activeValue = null }) => {
           setSelectedProject(project.projectId);
         }}
       >
-      {/* displaying project in JSON format */}
-      <IndividualProject project={project}/>
 
+      <IndividualProject project={project}/>
       </li>
     ))
   );

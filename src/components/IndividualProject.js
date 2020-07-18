@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
-import { useProjectsValue, useSelectedProjectValue } from '../../context';
-import { firebase } from '../../firebase';
+import { useProjectsValue, useSelectedProjectValue } from '../context';
+import { firebase } from '../firebase';
 
-export const IndividualProject = ({project}) => {
+export const IndividualProject = ({ project }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const { projects, setProjects } = useProjectsValue();
   const { setSelectedProject } = useSelectedProjectValue();
@@ -24,7 +24,7 @@ export const IndividualProject = ({project}) => {
     <>
       <span className="sidebar_dot">•</span>
       <span className="sidebar_project-name">{project.name}</span>
-      <span 
+      <span
         className="sidebar_project-delete"
         data-testid="delete-project"
         onClick={() => setShowConfirm(!showConfirm)} // reverse the value of showConfirm (clicking the trash icon starts deleting process)
@@ -32,12 +32,12 @@ export const IndividualProject = ({project}) => {
         <FaTrashAlt />
 
         {/* means if showConfirm is true, then render the rest of the HTML */}
-        { showConfirm && (
+        {showConfirm && (
           <div className="project-delete-modal">
             <div className="project-delete-modal_inner">
               <p>Are you sure you want to delete this project?</p>
               <button type="button" onClick={() => deleteProject(project.docId)}> Delete </button>
-              <span onClick={() => setShowConfirm(!showConfirm)}> Cancel </span> {/* cancels, sets showConfirm back to false (takes away popup) */}
+              <span onClick={() => setShowConfirm(!showConfirm)}>Cancel </span> {/* cancels, sets showConfirm back to false (takes away popup) */}
             </div>
           </div>
         )}

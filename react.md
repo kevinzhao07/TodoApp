@@ -141,6 +141,12 @@ We are going to be buliding a component which allows us to add projects within o
 
 ### Adding Tasks
 This component will allow us to add tasks into our React app. Evidently, the functionality between the two will remain largely similar and calling firebase will be necessary. Again, the code will be written and commented inside `AddTask.js`. This is a more complicated component with more parts. This is because when adding a task, we have a choice for which project it belongs to as well as which date it should be associated with. Both these must be selected through drop down menus, which are components in and of themselves. Also, we have to keep track of variables that either display those overlays or not. All in all, it is a pretty complicated component where keeping track of seeing the overlay is key. 
+> the two main items that we have to further add for `AddTask.js` is the `ProjectOverlay.js` and `TaskDate.js`. this is because each will be a separate component that renders only if it is pressed. for the overlay, a nice list of all the projects to choose from will be dispalyed, and for task date, a calendar will pop up to ask the user to choose a time. each code is written and commented in their respective component file. 
+
+## After the Tutorial
+
+### Small Changes
+1. I want to be able to see which project I selected and have it presented to me. The other way around was too confusing.
 
 ## Peculiarities 
 **Named Exports**  
@@ -206,3 +212,11 @@ React has a way to get user inputted values from forms. In any HTML element, we 
 >
 ```
 If we enclose which variable we want to use inside curly braces and put it inside value. When we submit the form (or press enter) the variable will update to have that current value. 
+
+**Iterating through all Objects in an Array**  
+Unlike Django/Jinja, we aren't able to use `{% for %}` keywords. There is another syntax that we use to map over items in an array that we want to display. This is seen in `Sidebar.js` and `ProjectOverlay.js`, where we have to display all projects/tasks for the user to see. The syntax is below:
+```js
+{projects.map(project => ( // map is the keyword that iterates through every item, project is the specified var name.
+  <li> Do stuff with project here. </li> // each project inside projects will do this.
+))};
+```

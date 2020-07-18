@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaInbox, FaCalendarDay, FaCalendarWeek, FaChevronDown } from 'react-icons/fa';
+import { FaInbox, FaCalendarDay, FaCalendarWeek, FaChevronDown, FaRocket } from 'react-icons/fa';
 // allows us to get the project that is currently selected.
 import { useSelectedProjectValue } from '../../context';
 import { Projects } from '../Projects';
@@ -49,6 +49,19 @@ export const Sidebar = () => {
         >
           <span><FaCalendarWeek /></span><span>Next 7 Days</span>
         </li>
+
+        {/* further goals */}
+        <li 
+          data-testid="goals" 
+          className={active === 'goals' ? 'active' : undefined} 
+          onClick={() => {
+            setActive('goals'); 
+            setSelectedProject('GOALS');
+          }}
+        >
+          <span><FaRocket /></span><span>Goals</span>
+        </li>
+
       </ul>
 
       <div className="sidebar_middle" onClick={() => setShowProjects(!showProjects)}>
