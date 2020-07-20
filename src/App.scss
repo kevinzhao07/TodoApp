@@ -29,6 +29,7 @@ ul {
 $generic-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 4px 11px;
 $generic-border: 1px solid #f1f1f1;
 $generic-bg: #db4c3f;
+$generic-bg-hover: #d62818;
 
 // MIXINS (Groups of CSS to be used throughout)
 @mixin color-palette() {
@@ -82,6 +83,10 @@ $generic-bg: #db4c3f;
   text-decoration: none !important;
   text-align: center;
   cursor: pointer;
+
+  &:hover {
+    background-color: $generic-bg-hover;
+  }
 }
 
 @mixin cancel() {
@@ -113,6 +118,17 @@ $generic-bg: #db4c3f;
   @media (max-width: $from) {
     @content;
   }
+}
+
+@mixin checkbox() {
+  cursor: pointer;
+  border-color: gray;
+  color: #343434;
+  height: 20px;
+  width: 20px;
+  display: block;
+  border: 1px solid grey;
+  border-radius: 16px;
 }
 
 // "DARK"MODE
@@ -276,6 +292,36 @@ header {
         color: #af38eb;
       }
     }
+
+    &:nth-child(6) {
+      .sidebar_dot {
+        color: #389aeb;
+      }
+    }
+
+    &:nth-child(7) {
+      .sidebar_dot {
+        color: #eb5338;
+      }
+    }
+
+    &:nth-child(8) {
+      .sidebar_dot {
+        color: #38eb98;
+      }
+    }
+
+    &:nth-child(9) {
+      .sidebar_dot {
+        color: #66e6bf;
+      }
+    }
+
+    &:nth-child(10) {
+      .sidebar_dot {
+        color: #da9e5b;
+      }
+    }
   }
 
   &_projects {
@@ -403,7 +449,7 @@ header {
 
   h2 {
     font-size: 20px;
-    font-weight: normal;
+    font-weight: 700;
     margin: 0px 30px 20px 0px;
   }
 
@@ -412,19 +458,23 @@ header {
   }
 
   .associated-project {
-    width: 115px;
+    width: 125px;
     background-color: $generic-bg;
     color: #fff !important;
     border: 1px solid transparent;
     font-weight: bold;
     font-size: 13px !important;
     line-height: 17px;
-    padding: 3px 0px;
     border-radius: 3px !important;
     text-decoration: none !important;
     text-align: center;
     float: right;
     margin-bottom: 3px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 3px 6px;
   }
 
   &_display-date {
@@ -442,8 +492,14 @@ header {
   &_information {
     width: 130px;
     position: absolute;
-    bottom: 5px;
+    bottom: 6px;
     right: 0px;
+  }
+
+  &_list {
+    li:first-of-type {
+      border-top: 1px solid #f0f0f0;
+    }
   }
 
   &_list li {
@@ -465,7 +521,7 @@ header {
     .item {
       min-height: 43px;
       line-height: 43px;
-      width: 70%;
+      width: 72%;
       word-break: break-all;
 
       &_short {
@@ -482,15 +538,23 @@ header {
       line-height: 17px;
 
       .checkbox {
-        cursor: pointer;
-        border-color: gray;
-        color: #343434;
-        height: 16px;
-        width: 16px;
-        display: block;
-        border: 1px solid grey;
-        border-radius: 16px;
+        @include checkbox();
+
+        &_active {
+          @include checkbox();
+          background-color: $generic-bg;
+          border: none;
+        }
+
+        &_active:hover {
+          border: 3px solid rgb(255, 197, 197);
+        }
       }
+
+      .checkbox:hover {
+        border: 3px solid $generic-bg;
+      }
+      
     }
   }
 }
@@ -583,6 +647,10 @@ header {
     float: left;
     vertical-align: middle;
     height: 33px;
+    
+    &:hover {
+      background-color: #1564be;
+    }
   }
   
   &_projectText {
@@ -602,6 +670,10 @@ header {
     margin-right: 0px;
     float: right;
     background-color: #2972c7;
+
+    &:hover {
+      background-color: #1564be;
+    }
   }
 
   &_cancel, &_submit {
@@ -650,6 +722,10 @@ header {
       fill: grey;
     }
   }
+
+  &_labels {
+    margin-left: 5px;
+  }
 }
 
 // PROJECT OVERLAY
@@ -684,7 +760,7 @@ header {
   }
 
   &_submit {
-    @include btn('100px');
+    @include btn(100px);
   }
 
   &_cancel {

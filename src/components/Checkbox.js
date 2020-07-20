@@ -21,7 +21,7 @@ export const Checkbox = ({id, archived}) => {
       data-testid="checkbox-action"
       onClick={() => archiveTask()}
     >
-      <span className="checkbox" />
+      <span className={archived ? 'checkbox_active' : 'checkbox'} />
     </div>
   );
 }

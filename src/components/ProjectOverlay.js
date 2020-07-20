@@ -1,9 +1,9 @@
 import React from 'react';
 import { useProjectsValue } from '../context';
 
-export const ProjectOverlay = ({ setProject, showProjectOverlay, setShowProjectOverlay, setProjectName }) => {
+export const ProjectOverlay = ({ setProject, showProjectOverlay, setShowProjectOverlay, setProjectName, setUpdatedProject }) => {
   const { projects } = useProjectsValue();
- 
+
   return ( // building out the component we are about to return 
     projects && showProjectOverlay && ( // weird syntax. if projects and showPO is TRUE, then render the rest =>
       <div className="project-overlay" data-testid="project-overlay">
@@ -17,6 +17,7 @@ export const ProjectOverlay = ({ setProject, showProjectOverlay, setShowProjectO
                 setShowProjectOverlay(false);
                 setProject(project.projectId);
                 setProjectName(project.name);
+                setUpdatedProject(project.docId);
               }}
             > 
               {project.name} {/* shows the project names in a list */}

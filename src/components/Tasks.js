@@ -39,18 +39,15 @@ export const Tasks = () => {
     document.title = `${projectName}: Todoist`;
   });
 
+  // on first load of the page, delete all archived values
   useEffect(() => {
 
     async function deleteArchived() {
       const archivedTasks = firebase.firestore().collection('tasks');
       const snapshot = await archivedTasks.where('archived', '==', true).get();
       snapshot.forEach(task => {
-        firebase
-          .firestore()
-          .collection('tasks')
-          .doc(task.id)
-          .delete()
         
+        // save all our archvied tasks to deleted, so we can look back
         firebase
           .firestore()
           .collection('deleted-tasks')
@@ -60,6 +57,23 @@ export const Tasks = () => {
             task: task.data().task,
             date: task.data().date,
           })
+        
+        // // decrement remaining tasks (TODO: need to test)
+        // firebase
+        //   .firestore()
+        //   .collection('projects')
+        //   .where('projectId','==', task.data().projectId)
+        //   .get()
+        //   .then(snapshot => {
+        //     snapshot.forEach(project => {
+        //       const newCount = (project.data().count - 1) >= 0 ? project.data().count - 1 : 0;
+        //       project.ref.update({
+        //         count: newCount,
+        //       })
+        //     })
+        //   })
+        
+        task.ref.delete();
 
       });
     }
@@ -82,7 +96,7 @@ export const Tasks = () => {
               id={task.id} 
               archived={task.archived ? true : false}
             />
-            <div className={task.projectName ? 'item' : 'item item_short'}>
+            <div className={collatedTasksExist(selectedProject) && task.projectName ? 'item' : 'item item_short'}>
               <span className={task.archived ? "tasks_task crossed-out" : "tasks_task"}>{task.task}</span>
             </div>
 

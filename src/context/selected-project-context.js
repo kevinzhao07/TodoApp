@@ -7,7 +7,7 @@ export const SelectedProjectContext = createContext();
 // we are at the top level, so we will write a provider for consumers to use.
 // children is passed as parameter? not sure why for now.
 export const SelectedProjectProvider = ({ children }) => {
-  // we are setting SelectedProjects here (this looks like syntax for useState())
+  // we are setting SelectedProjects here 
   const [ selectedProject, setSelectedProject ] = useState('INBOX');
 
   return (

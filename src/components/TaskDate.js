@@ -21,7 +21,7 @@ export const TaskDate = ({ setTaskDate, showTaskDate, setShowTaskDate, setTaskDa
             data-testid="task-date-overlay"
           >
             <span> <FaChessPawn/> </span>
-            <span> Today </span>
+            <span className="task-date_labels"> Today </span>
           </li>
 
           {/* tomorrow */}
@@ -34,7 +34,7 @@ export const TaskDate = ({ setTaskDate, showTaskDate, setShowTaskDate, setTaskDa
             data-testid="task-date-tomorrow"
           >
             <span> <FaChessBishop/> </span>
-            <span> Tomorrow </span>
+            <span className="task-date_labels"> Tomorrow </span>
           </li>
 
           {/* next 7 days */}
@@ -47,7 +47,7 @@ export const TaskDate = ({ setTaskDate, showTaskDate, setShowTaskDate, setTaskDa
             data-testid="task-date-next-week"
           >
             <span> <FaChessKing/> </span>
-            <span>  Next Week </span>
+            <span className="task-date_labels"> Next Week </span>
           </li>
 
         </ul>

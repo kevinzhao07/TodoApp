@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaRegCalendarAlt, FaRegListAlt, FaTimes } from 'react-icons/fa';
 import { firebase } from '../firebase';
 import moment from 'moment';
-import { useSelectedProjectValue } from '../context';
+import { useSelectedProjectValue, useProjectsValue } from '../context';
 import { ProjectOverlay } from './ProjectOverlay';
 import { TaskDate } from './TaskDate';
 
@@ -19,13 +19,32 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
   const [showProjectOverlay, setShowProjectOverlay] = useState(false); // show the project overlay? default no, unless pressed.
   const [showTaskDate, setShowTaskDate] = useState(false); // show the task due date? default no, unless pressed.
   const [projectName, setProjectName] = useState(''); // show selected projectName
-
+  const [updatedProject, setUpdatedProject] = useState(''); // which project was altered? (find the docId) add 1 to tasks
+  
   const { selectedProject } = useSelectedProjectValue(); // context for adding tasks INTO the selected project (quick add).
+  const { projects } = useProjectsValue();
+
+  // resets to all original values for next task to be added
+  const resetAll = () => {
+    setTask('');
+    setTaskDay('');
+    setTaskDate('');
+
+    setProject('');
+    setProjectName('');
+    setUpdatedProject('');
+
+    setShowMain(false);
+    setShowProjectOverlay(false);
+    setShowTaskDate(false);
+  }
 
   // calling firestore to add the task in
   const addTask = () => {
     const projectId = project || selectedProject; // not a traditional 'or' statement. the project id is project, else selectedProject.
     let collatedDate = ''; // what date is our task due? (IF NOT SET BY TASK DATE IN THE DROPDOWN!)
+    let name = '';
+    let docId = '';
 
     if (projectId === "TODAY") { // if we are ADDING our task to Project-TODAY, then the date is today
       collatedDate = moment().format('MM/DD/YYYY')
@@ -36,6 +55,34 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
       setTaskDay(moment().add(7, 'days').format('dddd'));
     }
 
+    // find the name of the project (if NO PROJECT SELECTED)
+    for (var i = 0; i < projects.length; ++i) {
+      if (projects[i].projectId === projectId) {
+        name = projects[i].name;
+        docId = projects[i].docId;
+      }
+    }
+
+    // keeps increment of how many total tasks for EACH project
+    // const updateValue = async () => {
+    //   if (!updatedProject && !(collatedTasksExist(selectedProject))) {
+    //     const projectReferences = firebase.firestore().collection('projects');
+    //     const snapshot = await projectReferences.doc(docId).get();
+    //     const newCount = snapshot.data().count + 1;
+    //     snapshot.ref.update({
+    //       count: newCount,
+    //     });
+    //   }
+    //   if (updatedProject) {
+    //     const projectReferences = firebase.firestore().collection('projects');
+    //     const snapshot = await projectReferences.doc(updatedProject).get();
+    //     const newCount = snapshot.data().count + 1;
+    //     snapshot.ref.update({
+    //       count: newCount,
+    //     });
+    //   }
+    // }
+
     return (
       task && projectId && // if theres a task and a projectId available, then add it to the firebase.
       firebase
@@ -44,19 +91,14 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
         .add({
           projectId,
           userId: 'randomUser',
-          date: collatedDate || taskDate,
+          date: taskDate || collatedDate,
           archived: false,
           task,
-          projectName,
+          projectName: projectName || name,
         })
         .then(() => { // then, reset everything for the next adding task.
-          setTask('');
-          setProject('');
-          setShowMain('');
-          setProjectName('');
-          setTaskDay('');
-          setTaskDate('');
-          setShowProjectOverlay(false);
+          // updateValue();
+          resetAll();
         })
     );
   };
@@ -86,13 +128,8 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
                   data-testid="add-task-quick-cancel"
                   aria-label="Cancel adding task"
                   onClick={() => { // if we cancel it, set everything back to normal (show is all false)
-                    setShowMain(false);
-                    setShowProjectOverlay(false);
+                    resetAll();
                     setShowQuickAddTask(false);
-                    setProjectName('');
-                    setTaskDate('');
-                    setTaskDay('');
-                    setProject(selectedProject);
                   }}
                 >
                   <FaTimes />
@@ -126,7 +163,7 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
                       className="add-task_project-cancel" 
                       onClick={() => {
                         setProjectName('');
-                        setProject(selectedProject);
+                        setProject('');
                       }}
                     />
                   </span>
@@ -170,12 +207,7 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
               className="add-task_cancel"
               data-testid="add-task-main-cancel"
               onClick={() => { // resets everything if cancelled. Note quick add is already false.
-                setShowMain(false);
-                setShowProjectOverlay(false);
-                setProjectName('');
-                setProject(selectedProject);
-                setTaskDate('');
-                setTaskDay('');
+                resetAll();
               }}
             >
               Cancel
@@ -205,6 +237,7 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
             setShowProjectOverlay={setShowProjectOverlay}
             showProjectOverlay={showProjectOverlay}
             setProjectName={setProjectName}
+            setUpdatedProject={setUpdatedProject}
           />
 
 
@@ -215,7 +248,6 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
             setShowTaskDate={setShowTaskDate}
             setTaskDay={setTaskDay}
           />
-
 
         </div>
       )}

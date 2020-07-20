@@ -23,6 +23,7 @@ export const AddProject = ({ shouldShow = false }) => {
           projectId,
           name: projectName,
           userId: 'randomUser',
+          count: 0,
         })
         .then(() => {
           setProjects([]); // tricks firebase into pulling all new projects again (like a refresh)
