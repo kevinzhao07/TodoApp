@@ -5,6 +5,7 @@ import moment from 'moment';
 import { useSelectedProjectValue, useProjectsValue } from '../context';
 import { ProjectOverlay } from './ProjectOverlay';
 import { TaskDate } from './TaskDate';
+import { getProject } from '../helpers';
 
 // showAddTaskMain (should the main view show an add task button?) / showShouldMain (should the main view show the dropdown? FALSE if not clicked)
 // showQuickAddTask (should the header show quick add?) / setShowQuickAddTask (set false when quick add is finished/cancelled)
@@ -45,6 +46,7 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
     let collatedDate = ''; // what date is our task due? (IF NOT SET BY TASK DATE IN THE DROPDOWN!)
     let name = '';
     let docId = '';
+    let color = '';
 
     if (projectId === "TODAY") { // if we are ADDING our task to Project-TODAY, then the date is today
       collatedDate = moment().format('MM/DD/YYYY')
@@ -56,11 +58,11 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
     }
 
     // find the name of the project (if NO PROJECT SELECTED)
-    for (var i = 0; i < projects.length; ++i) {
-      if (projects[i].projectId === projectId) {
-        name = projects[i].name;
-        docId = projects[i].docId;
-      }
+    const projectAssociated = getProject(projects, projectId);
+    if (projectAssociated) {
+      name = projectAssociated.name;
+      docId = projectAssociated.docId;
+      color = projectAssociated.color;
     }
 
     // keeps increment of how many total tasks for EACH project
@@ -95,6 +97,7 @@ export const AddTask = ({ showAddTaskMain = true, shouldShowMain = false, showQu
           archived: false,
           task,
           projectName: projectName || name,
+          color: color,
         })
         .then(() => { // then, reset everything for the next adding task.
           // updateValue();

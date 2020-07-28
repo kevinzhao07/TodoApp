@@ -6,11 +6,11 @@ export const collatedTasksExist = selectedProject =>
   collatedTasks.find(task => task.key === selectedProject);
 
 // checking if theres projects where the projectId are equal.
-export const getTitle = (projects, projectId) => 
+export const getProject = (projects, projectId) => 
   projects.find(project => project.projectId === projectId);
 
 // checking if theres projects where the key are equal.
-export const getCollatedTitle = (projects, key) =>
+export const getCollatedProject = (projects, key) =>
   projects.find(project => project.key === key);
 
 export const generatePushId = (() => {

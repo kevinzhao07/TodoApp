@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaTrashAlt, FaTag } from 'react-icons/fa';
+import { BsFolderFill } from 'react-icons/bs';
 import { useProjectsValue, useSelectedProjectValue } from '../context';
 import { firebase } from '../firebase';
 
@@ -22,8 +23,9 @@ export const IndividualProject = ({ project }) => {
 
   return (
     <>
-      <span className="sidebar_dot">•</span>
+      <span style={{color: project.color}} className="sidebar_dot" >•</span>
       <span className="sidebar_project-name">{project.name}</span>
+      <span style={{color: project.color}}><BsFolderFill /></span>
       <span
         className="sidebar_project-delete"
         data-testid="delete-project"

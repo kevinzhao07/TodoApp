@@ -4,6 +4,7 @@ import { FaInbox, FaCalendarDay, FaCalendarWeek, FaChevronDown, FaRocket } from 
 import { useSelectedProjectValue } from '../../context';
 import { Projects } from '../Projects';
 import { AddProject } from '../AddProject';
+import moment from 'moment';
 
 export const Sidebar = () => {
   const { setSelectedProject } = useSelectedProjectValue();
@@ -35,7 +36,7 @@ export const Sidebar = () => {
             setSelectedProject('TODAY');
           }}
         >
-          <span><FaCalendarDay /></span><span>Today</span>
+          <span><FaCalendarDay /></span><span>Today</span><small>{moment().format('M/D')}</small>
         </li>
         
         {/* next 7 */}
@@ -47,7 +48,7 @@ export const Sidebar = () => {
             setSelectedProject('NEXT_7');
           }}
         >
-          <span><FaCalendarWeek /></span><span>Next 7 Days</span>
+          <span><FaCalendarWeek /></span><span>Next 7 Days</span><small>{moment().format('M/D')} — {moment().add(7, 'days').format('M/D')}</small>
         </li>
 
         {/* further goals */}

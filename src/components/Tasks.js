@@ -3,7 +3,7 @@ import { Checkbox } from './Checkbox';
 import { AddTask } from './AddTask';
 import { useTasks } from '../hooks';
 import { collatedTasks } from '../constants';
-import { getTitle, getCollatedTitle, collatedTasksExist } from '../helpers';
+import { getProject, getCollatedProject, collatedTasksExist } from '../helpers';
 import { useSelectedProjectValue, useProjectsValue } from '../context';
 import { firebase } from '../firebase';
 
@@ -21,7 +21,7 @@ export const Tasks = () => {
   
   // if our selectedProject was one of (inbox, tomorrow, next 7), get those. 
   if (collatedTasksExist(selectedProject) && selectedProject) {
-    projectName = getCollatedTitle(collatedTasks, selectedProject).name;
+    projectName = getCollatedProject(collatedTasks, selectedProject).name;
   }
 
   // getting regular tasks (if exists) that are not inbox, tomorrow, or next 7
@@ -31,7 +31,7 @@ export const Tasks = () => {
     selectedProject &&
     !collatedTasksExist(selectedProject)
   ) {
-    projectName = getTitle(projects, selectedProject).name;
+    projectName = getProject(projects, selectedProject).name;
   }
 
   // whenever we select a new project, we update the document's title tag. 
@@ -102,7 +102,7 @@ export const Tasks = () => {
 
             <div className="tasks_information">
               {collatedTasksExist(selectedProject) && task.projectName && (
-                <span className="associated-project">
+                <span className="associated-project" style={{backgroundColor: task.color}}>
                   {task.projectName}
                 </span>
               )}

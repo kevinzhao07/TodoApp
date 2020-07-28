@@ -240,6 +240,10 @@ header {
     padding-left: 10px;
     padding-right: 15px;
 
+    .sidebar_project-name {
+      margin-right: 7px;
+    }
+
     &:hover .sidebar_project-delete {
       display: block;
     }
@@ -263,65 +267,6 @@ header {
       background-color: white;
     }
 
-    &:nth-child(1) {
-      .sidebar_dot {
-        color: #6accbc;
-      }
-    }
-    
-    &:nth-child(2) {
-      .sidebar_dot {
-        color: #fad003;
-      }
-    }
-
-    &:nth-child(3) {
-      .sidebar_dot {
-        color: #ff8d85;
-      }
-    }
-
-    &:nth-child(4) {
-      .sidebar_dot {
-        color: #ff9932;
-      }
-    }
-
-    &:nth-child(5) {
-      .sidebar_dot {
-        color: #af38eb;
-      }
-    }
-
-    &:nth-child(6) {
-      .sidebar_dot {
-        color: #389aeb;
-      }
-    }
-
-    &:nth-child(7) {
-      .sidebar_dot {
-        color: #eb5338;
-      }
-    }
-
-    &:nth-child(8) {
-      .sidebar_dot {
-        color: #38eb98;
-      }
-    }
-
-    &:nth-child(9) {
-      .sidebar_dot {
-        color: #66e6bf;
-      }
-    }
-
-    &:nth-child(10) {
-      .sidebar_dot {
-        color: #da9e5b;
-      }
-    }
   }
 
   &_projects {
@@ -381,6 +326,12 @@ header {
           height: 18px;
           color: #555;
         }
+      }
+
+      small {
+        margin-top: 3px;
+        margin-left: 10px;
+        color: grey;
       }
 
       &.active, &:hover {
@@ -748,6 +699,49 @@ header {
   &_input {
     margin-bottom: 20px;
   }
+
+  &_color-display {
+    width: 23px;
+    height: 23px;
+    border-radius: 40px;
+    margin-right: 5px;
+    margin-top: 14px;
+    float: right;
+  }
+
+  &_color-toggle {
+    font-size: 12px;
+    color: grey;
+    float: right;
+    margin-top: 20px;
+  }
+
+  .color-overlay {
+    @include box-overlay();
+    max-width: 52px;
+    padding-right: 0px;
+    background-color: white;
+    right: 0;
+    margin-right: 23px;
+
+    &_icon {
+      font-size: 21px;
+      position: absolute;
+      margin-left: 10px;
+      margin-top: 10px;
+      color: #ffffff;
+    }
+
+    &_list li {
+      @include task-item();
+      padding: 6px;
+      position: relative;
+
+      li:hover {
+        background-color: lightgrey;
+      }
+    }
+  }
   
   &_name {
     width: 100%;
@@ -765,5 +759,6 @@ header {
 
   &_cancel {
     @include cancel();
+    margin-right: 35px;
   }
 }
